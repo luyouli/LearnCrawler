@@ -27,6 +27,9 @@
 # 创建方式：loop = asyncio.get_event_loop()
 # 注册且启动方式：loop.run_until_complete(task)
 
+# 重要注意事项
+# 在特殊函数内部不可以出现不支持异步模块对应的代码，否则会中断整个异步效果
+
 import asyncio
 import requests
 import time
