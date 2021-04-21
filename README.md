@@ -1,6 +1,6 @@
 # LearnCrawler
 
-pip3 install requests beautifulsoup4 lxml wheel scrapy pywin32 Flask aiohttp asyncio selenium Twisted
+pip3 install requests beautifulsoup4 lxml Flask aiohttp asyncio selenium wheel Twisted pywin32 scrapy
 
 没有“代理实战”的代码
 
