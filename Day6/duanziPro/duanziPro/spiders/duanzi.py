@@ -28,6 +28,21 @@ class DuanziSpider(scrapy.Spider):
     #
     #         print(title,content)
 
+
+# 持久化存储
+# 基于终端指令的持久化存储
+# 要求：该方法只可以将parse方法的返回值存储到本地指定后缀的文本文件中
+# 指令：scrapy.exe crawl duanzi -o duanzi.csv
+
+# 基于管道的持久化存储（重点）
+# 1.在爬虫文件（duanzi.py）中进行数据解析
+# 2.在item.py中定义相关属性，步骤1中解析出来几个字段的数据，就定义几个属性
+# 3.在爬虫文件中将解析到的数据存储封装到Item类型的对象中
+# 4.将Item类型的对象提交给管道
+# 5.在管道文件（pipelines.py）中，接收爬虫文件提交过来的Item类型对象，且对其进行任意形式的持久化操作
+# 6.在配置文件（settings.py）中开启管到机制    
+
+
     # 将解析到的数据进行持久化存储: 基础终端指令的持久化存储
     # def parse(self, response):
     #     all_data = []
