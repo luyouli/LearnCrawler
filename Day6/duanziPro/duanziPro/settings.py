@@ -67,6 +67,8 @@ ROBOTSTXT_OBEY = False
 ITEM_PIPELINES = {
     # 300的意思是：管道类的优先级，数值越小优先级越高
    'duanziPro.pipelines.DuanziproPipeline': 300,
+   'duanziPro.pipelines.MysqlPipeline': 301,
+   'duanziPro.pipelines.RedisPipeline': 302,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -6,7 +6,8 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-
+import pymysql
+from redis import Redis
 
 class DuanziproPipeline:
     # 重写父类的两个方法
@@ -24,3 +25,32 @@ class DuanziproPipeline:
         # 将item存储到文本文件
         self.fp.write(item['title']+':'+item['content']+'\n')
         return item
+
+# 将数据存储到mysql中
+class MysqlPipeline(object):
+    conn = None
+    cursor = None
+    def open_spider(self,spider):
+        self.conn = pymysql.Connect(host='127.0.0.1',port=3308,user='root',password='spider123456',db='spider',charset='utf8')
+    def process_item(self,item,spider):
+        self.cursor = self.conn.cursor()
+        sql = 'insert into duanziwang values ("%s","%s")'%(item['title'],item['content'])
+        # 执行sql，提交事务处理
+        try:
+            self.cursor.execute(sql)
+            self.conn.commit()
+        except Exception as e:
+            print(e)
+            self.conn.rollback()
+        return item   # 加上这一句，才可以保证优先级低的redis照样可以拿到数据
+    def close_spider(self,spider):
+        self.cursor.close()
+        self.conn.close()
+
+# 将数据存储到redis中，redis模块必须是2.10.x
+class RedisPipeline(object):
+    conn = None
+    def open_spider(self,spider):
+        self.conn = Redis(host='127.0.0.1',port=6666,password='666666')
+    def process_item(self,item,spider):
+        self.conn.lpush('duanziDataRedis',item)
