@@ -26,7 +26,8 @@ class MovieSpider(scrapy.Spider):
     name = 'movie'
     # allowed_domains = ['www.xxx.com']
     start_urls = ['http://www.4567kan.com/index.php/vod/show/id/5.html']
-
+    url = 'http://www.4567kan.com/index.php/vod/show/id/5.html/page/%d.html'
+    pageNum = 2
     def parse(self, response):
         li_list = response.xpath('/html/body/div[1]/div/div/div/div[2]/ul/li')
         for li in li_list:
@@ -39,6 +40,11 @@ class MovieSpider(scrapy.Spider):
             # 对详情页url发起请求
             # meta作用：可以将meta字典传递给callback
             yield scrapy.Request(url=detail_url,callback=self.parse_detail,meta={'item':item})
+
+        if self.pageNum < 5:
+            new_url = format(self.url%self.pageNum)
+            self.pageNum += 1
+            yield scrapy.Request(url=new_url,callback=self.parse)
 
     # 用于解析详情页的数据
     def parse_detail(self,response):
